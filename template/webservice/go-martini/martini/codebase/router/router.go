@@ -1,7 +1,7 @@
 package router
 
 import (
-	"{{ .AppName }}/controllers"
+	"{{ .ProjectName }}/controllers"
 	"github.com/go-martini/martini"
 	{{ if .Logging.ImportPath }}
 	"{{ .Logging.ImportPath }}"

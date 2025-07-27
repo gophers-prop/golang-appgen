@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"{{ .AppName }}/forms"
-	"{{ .AppName }}/models"
+	"{{ .ProjectName }}/forms"
+	"{{ .ProjectName }}/models"
 	"github.com/gin-gonic/gin"
 	{{ if .Logging.ImportPath }}
 	"{{ .Logging.ImportPath }}"

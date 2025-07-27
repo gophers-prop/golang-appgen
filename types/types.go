@@ -3,6 +3,7 @@ package types
 import (
 	"sync"
 )
+
 type Messages struct {
 	Error string `json:"ERROR"`
 	Info  string `json:"INFO"`
@@ -19,8 +20,8 @@ type LoggingFramework struct {
 }
 
 type Configuration struct {
-	AppName string
-	Logging *LoggingFramework
+	ProjectName string
+	Logging     *LoggingFramework
 }
 
 var Mutex = &sync.Mutex{}

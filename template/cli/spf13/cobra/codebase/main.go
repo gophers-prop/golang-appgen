@@ -1,11 +1,12 @@
 package main
 
 import (
-	"{{ .AppName }}/cmd"
 	"log"
+
+	"{{ .ProjectName }}/cmd"
 )
 
-func init(){
+func init() {
 
 	//setting flags for log level
 	log.SetFlags(3)

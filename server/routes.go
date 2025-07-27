@@ -7,11 +7,10 @@ import (
 	_ "github.com/gin-gonic/gin"
 )
 
-//RegisterRoute register routes
+// RegisterRoute register routes
 func (ws *WebServer) RegisterRoute() {
 
-	// Ping test
-	ws.server.POST("/simple-app", handle.GenerateTemplate)
+	ws.server.POST("/generate", handle.GenerateTemplate)
 	ws.server.POST("/explore-app", handle.GenerateGitHubRepo)
 	ws.server.GET("/app-count", handle.AppCounter)
 	ws.server.GET("/liveness", handle.Liveness)

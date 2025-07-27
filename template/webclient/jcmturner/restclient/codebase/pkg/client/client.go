@@ -1,11 +1,13 @@
 package client
 
 import (
-	"{{ .AppName }}/pkg/types"
-	"github.com/jcmturner/restclient"
-	"os"
 	"fmt"
+	"os"
+
+	"github.com/jcmturner/restclient"
+	"{{ .ProjectName }}/pkg/types"
 )
+
 // Basic create basic rest client
 func Basic() *restclient.Config {
 
@@ -16,5 +18,5 @@ func Basic() *restclient.Config {
 		fmt.Fprintf(os.Stderr, "ERROR: Configuration of web service not valid: %v", err)
 		os.Exit(1)
 	}
-	return c 
+	return c
 }

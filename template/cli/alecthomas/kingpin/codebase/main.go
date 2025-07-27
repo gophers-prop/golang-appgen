@@ -2,9 +2,9 @@ package main
 
 import (
 	"os"
-	"{{ .AppName }}/cmd"
-)
 
+	"{{ .ProjectName }}/cmd"
+)
 
 func main() {
 	cmd.Commands(os.Args[1:])

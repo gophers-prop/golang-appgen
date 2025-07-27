@@ -1,7 +1,7 @@
 package router
 
 import (
-	"{{ .AppName }}/controllers"
+	"{{ .ProjectName }}/controllers"
 	"goji.io"
 	"net/http"
 	"goji.io/pat"

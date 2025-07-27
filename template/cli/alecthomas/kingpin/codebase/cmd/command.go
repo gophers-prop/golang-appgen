@@ -2,22 +2,24 @@ package cmd
 
 import (
 	"strings"
+
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"{{ .AppName }}/pkg/echo"
-	"{{ .AppName }}/pkg/print"
+	"{{ .ProjectName }}/pkg/echo"
+	"{{ .ProjectName }}/pkg/print"
 )
 
 var (
-	app      = kingpin.New("{{ .AppName }}", "A command-line application.")
+	app = kingpin.New("{{ .ProjectName }}", "A command-line application.")
 
-	printCmd     = app.Command("print", "Print anything to the screen")
-	printMsg  = printCmd.Arg("text", "Text message to print").Strings()
+	printCmd = app.Command("print", "Print anything to the screen")
+	printMsg = printCmd.Arg("text", "Text message to print").Strings()
 
-	echoCmd       = app.Command("echo", "Echo anything to the screen")
-	echoText    = echoCmd.Arg("text", "Text message to echo").Strings()
-	echoTimes   = echoCmd.Flag("times", "Echo anything to the screen more times").Int()
+	echoCmd   = app.Command("echo", "Echo anything to the screen")
+	echoText  = echoCmd.Arg("text", "Text message to echo").Strings()
+	echoTimes = echoCmd.Flag("times", "Echo anything to the screen more times").Int()
 )
+
 // Commands represents commands to execute
 func Commands(args []string) {
 	switch kingpin.MustParse(app.Parse(args)) {
@@ -28,10 +30,10 @@ func Commands(args []string) {
 		// Echo message
 	case echoCmd.FullCommand():
 		if *echoTimes != 0 {
-			echo.WithTimes(strings.Join(*echoText, " "),*echoTimes)
+			echo.WithTimes(strings.Join(*echoText, " "), *echoTimes)
 		} else {
 			echo.WithoutTime(strings.Join(*echoText, " "))
 		}
-	
+
 	}
 }

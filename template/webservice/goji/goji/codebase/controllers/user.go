@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"{{ .AppName }}/forms"
-	"{{ .AppName }}/models"
+	"{{ .ProjectName }}/forms"
+	"{{ .ProjectName }}/models"
 	"goji.io/pat"
 	"net/http"
 	"encoding/json"

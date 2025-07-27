@@ -1,11 +1,11 @@
 package main
 
 import (
-	"{{ .AppName }}/router"
+	"{{ .ProjectName }}/router"
 	"goji.io"
 	"fmt"
 	{{ if .Logging.ImportPath }}
-	_"{{ .AppName }}/logger"
+	_"{{ .ProjectName }}/logger"
 	"{{ .Logging.ImportPath }}"
 	{{end}}
 	

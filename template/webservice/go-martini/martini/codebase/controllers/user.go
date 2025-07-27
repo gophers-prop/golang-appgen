@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"{{ .AppName }}/forms"
-	"{{ .AppName }}/models"
+	"{{ .ProjectName }}/forms"
+	"{{ .ProjectName }}/models"
 	"net/http"
 	"encoding/json"
 	"github.com/go-martini/martini"

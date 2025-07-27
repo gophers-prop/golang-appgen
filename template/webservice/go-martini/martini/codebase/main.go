@@ -1,10 +1,10 @@
 package main
 
 import (
-	"{{ .AppName }}/router"
+	"{{ .ProjectName }}/router"
 	"github.com/go-martini/martini"
 	{{ if .Logging.ImportPath }}
-	_"{{ .AppName }}/logger"
+	_"{{ .ProjectName }}/logger"
 	"{{ .Logging.ImportPath }}"
 	{{end}}
 	

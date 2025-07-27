@@ -1,22 +1,39 @@
 module go-initializer
 
-go 1.13
+go 1.24
 
 require (
-	github.com/codegangsta/inject v0.0.0-20150114235600-33e0aa1cb7c0 // indirect
-	github.com/codegangsta/martini v0.0.0-20170121215854-22fa46961aab // indirect
-	github.com/codegangsta/martini-contrib v0.0.0-20140208234550-8ce6181c2609 // indirect
-	github.com/gin-contrib/cors v1.3.0
-	github.com/gin-gonic/gin v1.5.0
-	github.com/go-martini/martini v0.0.0-20170121215854-22fa46961aab // indirect
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/gorilla/mux v1.7.3
-	github.com/hashicorp/go-multierror v1.0.0 // indirect
-	github.com/jcmturner/restclient v0.0.0-20180513084530-bfd3f693c938
-	github.com/martini-contrib/binding v0.0.0-20160701174519-05d3e151b6cf // indirect
-	github.com/sirupsen/logrus v1.2.0
-	github.com/spf13/cobra v0.0.5 // indirect
-	github.com/spf13/viper v1.6.1 // indirect
-	github.com/urfave/cli v1.22.2 // indirect
-	goji.io v2.0.2+incompatible // indirect
+	github.com/gin-contrib/cors v1.7.6
+	github.com/gin-gonic/gin v1.10.1
+	github.com/golang/glog v1.2.5
+	github.com/sirupsen/logrus v1.9.3
+)
+
+require (
+	github.com/bytedance/sonic v1.14.0 // indirect
+	github.com/bytedance/sonic/loader v0.3.0 // indirect
+	github.com/cloudwego/base64x v0.1.5 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
+	github.com/gin-contrib/sse v1.1.0 // indirect
+	github.com/go-playground/locales v0.14.1 // indirect
+	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-playground/validator/v10 v10.27.0 // indirect
+	github.com/goccy/go-json v0.10.5 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
+	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
+	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ugorji/go/codec v1.3.0 // indirect
+	golang.org/x/arch v0.19.0 // indirect
+	golang.org/x/crypto v0.40.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

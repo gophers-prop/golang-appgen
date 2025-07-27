@@ -1,7 +1,7 @@
 package router
 
 import (
-	"{{ .AppName }}/controllers"
+	"{{ .ProjectName }}/controllers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	{{ if .Logging.ImportPath }}

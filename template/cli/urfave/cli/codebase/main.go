@@ -1,21 +1,21 @@
 package main
 
-
-import(
+import (
 	"log"
-	"{{ .AppName }}/cmd"
+
+	"{{ .ProjectName }}/cmd"
 )
 
-func init(){
+func init() {
 
 	//setting flags for log level
 	log.SetFlags(3)
 }
 
-func main(){
+func main() {
 
-	app :=	cmd.NewCmd()
-	
+	app := cmd.NewCmd()
+
 	cmd.Run(app)
-	
+
 }

@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -27,7 +28,7 @@ import (
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{Use:   "{{ .AppName }}"}
+var rootCmd = &cobra.Command{Use: "{{ .ProjectName }}"}
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -59,9 +60,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".{{ .AppName }}" (without extension).
+		// Search config in home directory with name ".{{ .ProjectName }}" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".{{ .AppName }}")
+		viper.SetConfigName(".{{ .ProjectName }}")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

@@ -1,7 +1,7 @@
 package models
 
 import (
-	"{{ .AppName }}/forms"
+	"{{ .ProjectName }}/forms"
 	"fmt"
 	{{ if .Logging.ImportPath }}
 	"{{ .Logging.ImportPath }}"

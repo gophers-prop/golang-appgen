@@ -25,11 +25,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//GenerateTemplateRequest request payload for generate template
+// GenerateTemplateRequest request payload for generate template
 type GenerateTemplateRequest struct {
-	AppName             string `form:"appname" json:"appname" xml:"appname"  binding:"required"`
+	ProjectName         string `form:"projectName" json:"projectName" xml:"projectName"  binding:"required"`
 	AppType             string `form:"apptype" json:"apptype" xml:"apptype"  binding:"required"`
-	Library             string `form:"library" json:"library" xml:"library"  binding:"required"`
+	Framework           string `form:"framework" json:"framework" xml:"framework"  binding:"required"`
 	DependencyManagment string `form:"dependencies" json:"dependencies" xml:"dependencies" `
 	LoggingFramework    string `form:"loggingframework" json:"loggingFrameWork"`
 	OutputFormat        string `form:"outputformat" json:"outputformat"`
@@ -39,7 +39,7 @@ type GenerateTemplateRequest struct {
 	outputArchive       string
 }
 
-//GenerateTemplateResponse for future use
+// GenerateTemplateResponse for future use
 type GenerateTemplateResponse struct {
 	path    string
 	message string
@@ -50,7 +50,7 @@ type GetSupportedLibrariesRequest struct {
 	AppType string `form:"apptype" json:"apptype" xml:"apptype" binding:"required"`
 }
 
-//Counter
+// Counter
 type Counter struct {
 	Count int
 }
@@ -119,7 +119,7 @@ func AppCounter(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-//Cleanup perfoming cleanup activities
+// Cleanup perfoming cleanup activities
 func (request *GenerateTemplateRequest) Cleanup() error {
 
 	//cleaning output folder
@@ -138,24 +138,24 @@ func (request *GenerateTemplateRequest) Cleanup() error {
 
 }
 
-//Validate request payload TODO must improve this
+// Validate request payload TODO must improve this
 func (request *GenerateTemplateRequest) Validate() error {
-	if request.AppName == "" {
-		return fmt.Errorf("appname cannot be empty")
+	if request.ProjectName == "" {
+		return fmt.Errorf("ProjectName cannot be empty")
 	}
 	if !utils.HasElem(consts.SupportedAppType, request.AppType) {
 		return fmt.Errorf("apptype %s is not supported", request.AppType)
 	}
 	switch request.AppType {
 	case "cli":
-		if !utils.HasElem(consts.SupportedCliLib, request.Library) {
-			return fmt.Errorf("library %s is not supported ", request.Library)
+		if !utils.HasElem(consts.SupportedCliLib, request.Framework) {
+			return fmt.Errorf("Framework %s is not supported ", request.Framework)
 		}
 	}
 	return nil
 }
 
-//Liveness sds
+// Liveness sds
 func Liveness(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{"message": "liveness", "active": "true"})
@@ -198,7 +198,7 @@ func GenerateGitHubRepo(ctx *gin.Context) {
 
 }
 
-//GenerateTemplate Create a zip file of a template code
+// GenerateTemplate Create a zip file of a template code
 func GenerateTemplate(ctx *gin.Context) {
 
 	var request GenerateTemplateRequest
@@ -250,9 +250,9 @@ func GenerateTemplate(ctx *gin.Context) {
 
 		// zip is default output format . This is to support cli feature
 
-		ctx.Header("Content-Disposition", "attachment; filename="+request.AppName+"."+request.OutputFormat)
+		ctx.Header("Content-Disposition", "attachment; filename="+request.ProjectName+"."+request.OutputFormat)
 
-		ctx.Header("File-name", request.AppName+"."+request.OutputFormat)
+		ctx.Header("File-name", request.ProjectName+"."+request.OutputFormat)
 		ctx.File(request.outputArchive)
 
 		err = request.Cleanup()
@@ -266,27 +266,27 @@ func GenerateTemplate(ctx *gin.Context) {
 
 func generateOutput(request *GenerateTemplateRequest) (*GenerateTemplateResponse, error) {
 	sourcePath, _ := utils.GetWorkingDir()
-	request.outputFolder = filepath.Join(sourcePath, consts.OUTPUT_FOLDER, request.AppName+request.requestTime)
-	request.outputArchive = filepath.Join(sourcePath, consts.OUTPUT_ZIP, request.AppName+"."+request.OutputFormat)
+	request.outputFolder = filepath.Join(sourcePath, consts.OUTPUT_FOLDER, request.ProjectName+request.requestTime)
+	request.outputArchive = filepath.Join(sourcePath, consts.OUTPUT_ZIP, request.ProjectName+"."+request.OutputFormat)
 
 	if !utils.AppTypeExists(request.AppType) {
 
 		return nil, fmt.Errorf("requested apptype does not exists")
 	}
-	request.Library = strings.ReplaceAll(request.Library, "/", string(os.PathSeparator))
+	request.Framework = strings.ReplaceAll(request.Framework, "/", string(os.PathSeparator))
 
-	if !utils.LibExists(filepath.Join(request.AppType, request.Library)) {
-		return nil, fmt.Errorf("request library does not exists")
+	if !utils.LibExists(filepath.Join(request.AppType, request.Framework)) {
+		return nil, fmt.Errorf("request Framework does not exists")
 	}
 
-	request.sourceFolder = filepath.Join(sourcePath, "template", request.AppType, request.Library, "codebase")
+	request.sourceFolder = filepath.Join(sourcePath, "template", request.AppType, request.Framework, "codebase")
 
 	err := createOuputFolder(request)
 	if err != nil {
 		return nil, err
 	}
 
-	/*	cmd := exec.Command("bash", "-c", "gofmt -w "+request.AppName+request.requestTime)
+	/*	cmd := exec.Command("bash", "-c", "gofmt -w "+request.ProjectName+request.requestTime)
 		cmd.Dir = consts.OUTPUT_FOLDER
 		fmt.Println("Running gofmt command and waiting for it to finish...")
 		err = cmd.Run()
@@ -295,7 +295,7 @@ func generateOutput(request *GenerateTemplateRequest) (*GenerateTemplateResponse
 		}
 	*/
 	response := &GenerateTemplateResponse{
-		path:    request.AppName,
+		path:    request.ProjectName,
 		message: "Thanks for downloading",
 	}
 	return response, nil
@@ -361,7 +361,7 @@ func createOuputFolder(request *GenerateTemplateRequest) error {
 }
 
 func createRepo(request *GenerateTemplateRequest) {
-	repo_name := request.AppName
+	repo_name := request.ProjectName
 	token := os.Getenv("GITHUB_AUTH_TOKEN")
 	org_name := os.Getenv("GITHUB_ORG_NAME")
 
@@ -412,7 +412,7 @@ func createRepo(request *GenerateTemplateRequest) {
 		fmt.Println("Git commit err :", err)
 	}
 
-	cmd = exec.Command("git", "remote", "add", "origin", "https://github.com/"+org_name+"/"+request.AppName)
+	cmd = exec.Command("git", "remote", "add", "origin", "https://github.com/"+org_name+"/"+request.ProjectName)
 	cmd.Dir = request.outputFolder
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -588,7 +588,7 @@ func createTar(request *GenerateTemplateRequest) (err error) {
 
 func getConfiguration(req *GenerateTemplateRequest) types.Configuration {
 	var res types.Configuration
-	res.AppName = req.AppName
+	res.ProjectName = req.ProjectName
 
 	if req.LoggingFramework != "" {
 		loggingframework, err := readLogJson(req.LoggingFramework)
