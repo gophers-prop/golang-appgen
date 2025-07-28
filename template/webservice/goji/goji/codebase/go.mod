@@ -1,6 +1,6 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require (
     goji.io v2.0.2+incompatible

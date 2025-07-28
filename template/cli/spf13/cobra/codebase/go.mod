@@ -1,6 +1,6 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require (
 	github.com/mitchellh/go-homedir v1.1.0

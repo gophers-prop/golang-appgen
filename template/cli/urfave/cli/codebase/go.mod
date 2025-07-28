@@ -1,5 +1,5 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require github.com/urfave/cli v1.22.2

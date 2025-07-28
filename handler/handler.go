@@ -27,7 +27,9 @@ import (
 
 // GenerateTemplateRequest request payload for generate template
 type GenerateTemplateRequest struct {
+	GoVersion           string `form:"goVersion" json:"goVersion" xml:"goVersion"  binding:"required"`
 	ProjectName         string `form:"projectName" json:"projectName" xml:"projectName"  binding:"required"`
+	ModuleName          string `form:"moduleName" json:"moduleName" xml:"moduleName"  binding:"required"`
 	AppType             string `form:"apptype" json:"apptype" xml:"apptype"  binding:"required"`
 	Framework           string `form:"framework" json:"framework" xml:"framework"  binding:"required"`
 	DependencyManagment string `form:"dependencies" json:"dependencies" xml:"dependencies" `
@@ -588,7 +590,9 @@ func createTar(request *GenerateTemplateRequest) (err error) {
 
 func getConfiguration(req *GenerateTemplateRequest) types.Configuration {
 	var res types.Configuration
+	res.GoVersion = req.GoVersion
 	res.ProjectName = req.ProjectName
+	res.ModuleName = req.ModuleName
 
 	if req.LoggingFramework != "" {
 		loggingframework, err := readLogJson(req.LoggingFramework)

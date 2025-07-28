@@ -1,5 +1,5 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require github.com/go-resty/resty/v2 v2.1.0

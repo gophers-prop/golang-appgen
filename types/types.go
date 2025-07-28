@@ -20,7 +20,9 @@ type LoggingFramework struct {
 }
 
 type Configuration struct {
+	GoVersion   string
 	ProjectName string
+	ModuleName  string
 	Logging     *LoggingFramework
 }
 

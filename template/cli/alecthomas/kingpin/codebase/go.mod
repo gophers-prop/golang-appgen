@@ -1,6 +1,6 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect

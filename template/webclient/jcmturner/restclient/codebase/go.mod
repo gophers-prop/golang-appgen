@@ -1,6 +1,6 @@
-module {{ .ProjectName }}
+module {{ .ModuleName }}
 
-go 1.13
+go {{ .GoVersion}}
 
 require (
 	github.com/hashicorp/go-multierror v1.0.0 // indirect
