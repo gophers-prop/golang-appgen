@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
+	"errors"
 
 	"fmt"
 	"go-initializer/consts"
@@ -101,17 +102,6 @@ func GetSupportedLibraries(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"libraries": supportedLibs})
 }
 
-// Test : test function ...Must be removed
-func Test(ctx *gin.Context) {
-	var request GenerateTemplateRequest
-
-	if err := ctx.ShouldBind(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	fmt.Println(request)
-
-}
-
 func AppCounter(ctx *gin.Context) {
 
 	file, _ := ioutil.ReadFile("resources/counter.json")
@@ -165,8 +155,8 @@ func Liveness(ctx *gin.Context) {
 	return
 }
 
-// GenerateGitHubRepo: creating github repo
-func GenerateGitHubRepo(ctx *gin.Context) {
+// ExploreApp: Explore app using Web base IDE
+func ExploreApp(ctx *gin.Context) {
 	var request GenerateTemplateRequest
 
 	if err := ctx.ShouldBind(&request); err != nil {
@@ -185,7 +175,7 @@ func GenerateGitHubRepo(ctx *gin.Context) {
 	request.requestTime = fmt.Sprintf("%d", time.Now().Unix())
 	_, err := generateOutput(&request)
 
-	createRepo(&request)
+	exploreUrl, err := createRepo(&request)
 
 	if err != nil {
 		fmt.Println(err)
@@ -196,6 +186,7 @@ func GenerateGitHubRepo(ctx *gin.Context) {
 			fmt.Println(err)
 		}
 		fmt.Println("cleanup finished  ")
+		ctx.JSON(http.StatusOK, gin.H{"githubRepoUrl": exploreUrl})
 	}
 
 }
@@ -362,75 +353,74 @@ func createOuputFolder(request *GenerateTemplateRequest) error {
 
 }
 
-func createRepo(request *GenerateTemplateRequest) {
-	repo_name := request.ProjectName
+func createRepo(request *GenerateTemplateRequest) (string, error) {
+
+	repoName := "goxper-app-" + utils.RandomString(4)
+
+	// step1: Load env-vars
 	token := os.Getenv("GITHUB_AUTH_TOKEN")
-	org_name := os.Getenv("GITHUB_ORG_NAME")
+	orgName := os.Getenv("GITHUB_ORG_NAME")
+	userName := os.Getenv("GITHUB_USER_NAME")
 
-	url := "https://api.github.com/orgs/" + org_name + "/repos"
+	if token == "" || orgName == "" || userName == "" {
+		fmt.Println("Missing required vars: GITHUB_AUTH_TOKEN, GITHUB_ORG_NAME, GITHUB_USER_NAME")
+		return "", errors.New("Missing required vars: GITHUB_AUTH_TOKEN, GITHUB_ORG_NAME, GITHUB_USER_NAME")
+	}
 
-	payload := strings.NewReader("{\"name\":\"" + repo_name + "\"}")
+	// step2: Create Github repo
+	url := "https://api.github.com/orgs/" + orgName + "/repos"
+	payload := strings.NewReader(fmt.Sprintf(`{"name":"%s"}`, repoName))
 
-	req, _ := http.NewRequest("POST", url, payload)
+	req, err := http.NewRequest("POST", url, payload)
+	if err != nil {
+		fmt.Println("Error creating request", err)
+		return "", err
+	}
 
-	req.Header.Add("authorization", "token "+token)
-	req.Header.Add("content-type", "application/json")
-	req.Header.Add("cache-control", "no-cache")
-	req.Header.Add("postman-token", "e1c5b0b0-a573-98dd-008b-72250586c558")
+	req.Header.Set("Authorization", "token "+token)
+	req.Header.Add("Content-Type", "application/json")
 
-	res, _ := http.DefaultClient.Do(req)
-
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println("Repo creation request failed", err)
+		return "", err
+	}
 	defer res.Body.Close()
-	body, _ := ioutil.ReadAll(res.Body)
 
-	fmt.Println(res)
-	fmt.Println(string(body))
+	body, _ := io.ReadAll(res.Body)
+	if res.StatusCode >= 300 {
+		fmt.Printf("Failed to create github repo: %s\n", body)
+	}
+	fmt.Printf("Github repo created: %s\n", body)
 
-	//fmt.Printf("Successfully created new repo: %v\n", repo.GetName())
+	// step3: Git push ops
 
-	cmd := exec.Command("git", "init", request.outputFolder)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Git init err :", err)
+	runGit := func(args ...string) {
+		cmd := exec.Command("git", args...)
+		cmd.Dir = request.outputFolder
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		fmt.Printf("🔧 Running: git %s\n", strings.Join(args, " "))
+		if err := cmd.Run(); err != nil {
+			fmt.Printf("git %s failed: %v\n", strings.Join(args, " "), err)
+		}
 	}
 
-	cmd = exec.Command("git", "add", "*")
-	cmd.Dir = request.outputFolder
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	runGit("init")
+	runGit("config", "user.name", "Goxper Bot")
+	runGit("config", "user.email", "goxper-bot@example.com")
+	runGit("add", ".")
+	runGit("commit", "-m", "Initial Commit")
+	runGit("branch", "-M", "main") // Rename branch to main
 
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Git add err :", err)
-	}
+	// Step 3: Authenticated remote URL
+	remoteURL := fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", userName, token, orgName, repoName)
+	runGit("remote", "add", "origin", remoteURL)
+	runGit("push", "--set-upstream", "origin", "main")
 
-	cmd = exec.Command("git", "commit", "-m", "Initail Commit")
-	cmd.Dir = request.outputFolder
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Git commit err :", err)
-	}
-
-	cmd = exec.Command("git", "remote", "add", "origin", "https://github.com/"+org_name+"/"+request.ProjectName)
-	cmd.Dir = request.outputFolder
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Git remote add err :", err)
-	}
-
-	cmd = exec.Command("git", "push", "origin", "master")
-	cmd.Dir = request.outputFolder
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println("Git push err :", err)
-	}
+	// This to open code in web IDE
+	returnURL := fmt.Sprintf("https://github.dev/%s/%s", orgName, repoName)
+	return returnURL, nil
 
 }
 func createZip(request *GenerateTemplateRequest) error {

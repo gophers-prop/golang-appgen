@@ -11,10 +11,9 @@ import (
 func (ws *WebServer) RegisterRoute() {
 
 	ws.server.POST("/generate", handle.GenerateTemplate)
-	ws.server.POST("/explore-app", handle.GenerateGitHubRepo)
+	ws.server.POST("/explore", handle.ExploreApp)
 	ws.server.GET("/app-count", handle.AppCounter)
 	ws.server.GET("/liveness", handle.Liveness)
-	ws.server.POST("/test", handle.Test)
 	ws.server.GET("/libs", handle.GetSupportedLibraries)
 
 	// Get user value

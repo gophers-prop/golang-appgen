@@ -4,11 +4,25 @@ import (
 	"fmt"
 	"go-initializer/consts"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 )
+
+func RandomString(n int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(b)
+
+}
 
 func HasElem(s interface{}, elem interface{}) bool {
 	arrV := reflect.ValueOf(s)
@@ -27,7 +41,7 @@ func HasElem(s interface{}, elem interface{}) bool {
 	return false
 }
 
-//AppTypeExists d
+// AppTypeExists d
 func AppTypeExists(appType string) bool {
 	homeDir := GetWorkingDirNoError()
 
@@ -40,7 +54,7 @@ func AppTypeExists(appType string) bool {
 	return false
 }
 
-//LibExists l
+// LibExists l
 func LibExists(library string) bool {
 	fmt.Println(string(os.PathSeparator))
 	homeDir := GetWorkingDirNoError()
@@ -55,7 +69,7 @@ func LibExists(library string) bool {
 
 }
 
-//ListDir will return list of directory inside path depth is 1
+// ListDir will return list of directory inside path depth is 1
 func ListDir(path string) ([]string, error) {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
@@ -70,7 +84,7 @@ func ListDir(path string) ([]string, error) {
 	return dirName, nil
 }
 
-//GetWorkingDir get current working directory
+// GetWorkingDir get current working directory
 func GetWorkingDir() (string, error) {
 
 	path, err := os.Getwd()
@@ -80,7 +94,7 @@ func GetWorkingDir() (string, error) {
 	return path, nil
 }
 
-//GetWorkingDir get current working directory
+// GetWorkingDir get current working directory
 func GetWorkingDirNoError() string {
 
 	path, _ := os.Getwd()
@@ -88,17 +102,17 @@ func GetWorkingDirNoError() string {
 	return path
 }
 
-//GetTemplateDir get root template directory
+// GetTemplateDir get root template directory
 func GetTemplateDir() string {
 	return filepath.Join(GetWorkingDirNoError(), consts.TemplatePath)
 }
 
-//AddCliLibs add these libs to supported cli libs
+// AddCliLibs add these libs to supported cli libs
 func AddCliLibs(cliNames []string) {
 	consts.SupportedCliLib = cliNames
 }
 
-//GetOnlyTemplateCOnfigurableFiles this will list out files who will be configured in template
+// GetOnlyTemplateCOnfigurableFiles this will list out files who will be configured in template
 func GetOnlyTemplateCOnfigurableFiles(rootPath string) ([]string, error) {
 	var filePath []string
 

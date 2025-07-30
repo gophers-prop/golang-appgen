@@ -1,6 +1,6 @@
 
 ## About this application
-This is a sample cli application generated using http://golangapps.com.  It contains a sample code for cli application and can be extended with your business logic. The directory structure of this application is created based on industry best practices and recommendations
+This is a sample cli application generated using https://go.techxper.in.  It contains a sample code for cli application and can be extended with your business logic. The directory structure of this application is created based on industry best practices and recommendations
 
 ## How to build
 Execute 'go build main.go' command to build this application.
@@ -16,7 +16,7 @@ go run main.go echo Hello
 This application code uses 'spf13/cobra' library. You can find more details about this at github.com/urfave/cli
 
 ## What's next
-Add your own logic/code to this application to create application as per your requirement. You can also generate same application using different library. Please visit http://golangapps.com for more details.
+Add your own logic/code to this application to create application as per your requirement. You can also generate same application using different library. Please visit https://go.techxper.in for more details.
  
 
 

@@ -13,7 +13,7 @@ A Golang AppGen generates Golang application code using packges selected by user
 
 ### Start using Golang AppGen:
 
-* Open http://golangapps.com
+* Open https://go.techxper.in
 * Select Type of application you wanted to generate.
 * Select packges you wanted to use in your application.
 * Enter name of your application.
